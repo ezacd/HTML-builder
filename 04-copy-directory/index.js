@@ -1,10 +1,10 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-async function copyDir() {
-  const sourceDirPath = path.join(__dirname, 'files');
-  const destDirPath = path.join(__dirname, 'files-copy');
+const sourceDirPath = path.join(__dirname, 'files');
+const destDirPath = path.join(__dirname, 'files-copy');
 
+async function copyDir(sourceDirPath, destDirPath) {
   try {
     await fs.mkdir(destDirPath, { recursive: true });
 
@@ -14,7 +14,11 @@ async function copyDir() {
       const sourceFilePath = path.join(sourceDirPath, file.name);
       const destinationFilePath = path.join(destDirPath, file.name);
 
-      await fs.copyFile(sourceFilePath, destinationFilePath);
+      if (file.isDirectory()) {
+        await copyDir(sourceFilePath, destinationFilePath);
+      } else {
+        await fs.copyFile(sourceFilePath, destinationFilePath);
+      }
     });
 
     await Promise.all(filePromises);
@@ -23,4 +27,4 @@ async function copyDir() {
   }
 }
 
-copyDir();
+copyDir(sourceDirPath, destDirPath);
