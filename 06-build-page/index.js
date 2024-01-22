@@ -25,9 +25,17 @@ async function createHtml() {
 }
 
 async function replaceTemplate(template) {
-  const pathToTemplate = path.join(__dirname, 'components', template + '.html');
-  const html = await fs.readFile(pathToTemplate, 'utf-8');
-  return html;
+  try {
+    const pathToTemplate = path.join(
+      __dirname,
+      'components',
+      template + '.html',
+    );
+    const html = await fs.readFile(pathToTemplate, 'utf-8');
+    return html;
+  } catch (err) {
+    return `{{${template}}}`;
+  }
 }
 
 async function createCss() {
