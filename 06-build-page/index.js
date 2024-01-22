@@ -6,11 +6,17 @@ async function createHtml() {
   const projectDistHtml = path.join(projectDist, 'index.html');
   const htmlTemplate = path.join(__dirname, 'template.html');
 
-  const templates = ['header', 'articles', 'footer'];
+  fs.mkdir(projectDist, { recursive: true });
 
   let html = await fs.readFile(htmlTemplate, 'utf-8');
 
-  fs.mkdir(projectDist, { recursive: true });
+  const regex = /\{([^{}]+)\}/g;
+  const templates = [];
+  let match;
+
+  while ((match = regex.exec(html)) !== null) {
+    templates.push(match[1]);
+  }
 
   for (let template of templates) {
     html = html.replace(`{{${template}}}`, await replaceTemplate(template));
