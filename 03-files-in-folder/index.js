@@ -13,7 +13,7 @@ async function processFiles() {
         const fileName = file.name.split('.')[0];
         const ext = path.extname(file.name).split('.')[1];
         const stats = await fs.stat(path.join(dirPath, file.name));
-        const size = stats.size;
+        const size = Math.round(stats.size / 1024) + 'Kb';
 
         console.log(`${fileName} - ${ext} - ${size}`);
       }
