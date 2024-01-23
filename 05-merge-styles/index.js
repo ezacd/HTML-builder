@@ -6,15 +6,8 @@ async function createFile() {
   const destDirPath = path.join(__dirname, 'project-dist');
   const resCss = path.join(destDirPath, 'bundle.css');
 
-  try {
-    await fs.unlink(resCss);
-    create(sourceDirPath, resCss);
-  } catch (err) {
-    create(sourceDirPath, resCss);
-  }
-}
+  await fs.rm(resCss, { recursive: true, force: true });
 
-async function create(sourceDirPath, resCss) {
   try {
     const files = await fs.readdir(sourceDirPath, { withFileTypes: true });
 
